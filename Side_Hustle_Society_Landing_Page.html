@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0F1A3C" />
+  <title>Side Hustle Society</title>
+  <meta name="description" content="A CCHS student-led gig marketplace. Hire a local teen or sign up to work." />
+  <style>
+    :root {
+      --navy: #0F1A3C;
+      --navy-2: #14234D;
+      --navy-3: #1B2C5A;
+      --navy-4: #243a6e;
+      --gold: #F5B82E;
+      --gold-2: #FFC94F;
+      --gold-light: #FFE99C;
+      --text: #E8EDF7;
+      --muted: #A9B4D1;
+      --danger: #F87171;
+      --ok: #86EFAC;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .widget {
+      width: 100%;
+      max-width: 440px;
+      min-height: calc(100vh - 40px);
+      position: relative;
+    }
+
+    /* Screen transitions */
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .screen.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header row */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      min-height: 44px;
+    }
+    .back {
+      background: transparent;
+      border: 0;
+      color: var(--gold);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back:active { opacity: 0.6; }
+    .brandbar {
+      font-family: "Arial Black", Arial, sans-serif;
+      letter-spacing: 3px;
+      font-size: 11px;
+      color: var(--gold);
+    }
+
+    /* Hero logo */
+    .logo {
+      width: 84px;
+      height: 84px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 14px auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo svg { width: 42px; height: 42px; fill: var(--navy); }
+
+    h1 {
+      font-family: "Arial Black", Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-align: center;
+      color: #FFF;
+      line-height: 1.15;
+    }
+    .tag {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 4px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    h2 {
+      font-family: "Arial Black", Arial, sans-serif;
+      font-size: 20px;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .q {
+      margin: 28px 0 18px;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+      text-align: center;
+    }
+    .q .gold { color: var(--gold); }
+
+    /* Big CTA buttons */
+    .btn {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      padding: 20px 20px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      text-align: left;
+      font-weight: 800;
+      font-size: 16px;
+      border: 0;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.12s;
+      position: relative;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 4px 0 #C69418;
+    }
+    .btn-primary:active { box-shadow: 0 2px 0 #C69418; transform: translateY(2px); }
+    .btn-secondary {
+      background: transparent;
+      color: #FFF;
+      border: 2px solid var(--gold);
+    }
+    .btn-secondary:active { background: rgba(245, 184, 46, 0.12); }
+    .btn .arrow {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      font-weight: 900;
+    }
+    .btn .sub-text {
+      display: block;
+      font-weight: 500;
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
+    .btn-secondary .sub-text { color: var(--muted); }
+
+    /* Service chips on landing */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 24px 0 20px;
+      justify-content: center;
+    }
+    .chip {
+      background: var(--navy-2);
+      color: var(--text);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .foot {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px dashed rgba(245, 184, 46, 0.4);
+      text-align: center;
+    }
+    .foot a { color: var(--gold-2); text-decoration: none; }
+
+    /* Form groups */
+    .group {
+      margin-bottom: 14px;
+    }
+    label.lbl {
+      display: block;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    label.lbl .req { color: var(--gold-2); }
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px 14px;
+      background: var(--navy-2);
+      border: 1.5px solid var(--navy-4);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'><path d='M1 1l6 6 6-6' stroke='%23F5B82E' stroke-width='2' fill='none' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+    .checks { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sub-lbl {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .quick-set {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .quick {
+      background: transparent;
+      border: 1px solid var(--navy-4);
+      color: var(--muted);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .quick:hover, .quick:active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .check-pill {
+      display: inline-block;
+      padding: 9px 13px;
+      background: var(--navy-2);
+      border: 1.5px solid var(--navy-4);
+      border-radius: 999px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .check-pill input { display: none; }
+    .check-pill.on {
+      background: var(--gold);
+      color: var(--navy);
+      border-color: var(--gold);
+    }
+    .check-pill:active { transform: scale(0.97); }
+
+    .radio-row { display: flex; gap: 6px; }
+    .radio-row .check-pill { flex: 1; text-align: center; }
+
+    .consent-box {
+      background: var(--navy-2);
+      border: 1.5px solid var(--gold);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .consent-box strong { color: var(--gold); }
+    .consent-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .consent-check input { margin-top: 3px; accent-color: var(--gold); width: 18px; height: 18px; }
+
+    .err {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 4px;
+      min-height: 14px;
+    }
+
+    .submit-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: 0;
+      width: 100%;
+      padding: 18px;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 0 #C69418;
+      font-family: inherit;
+    }
+    .submit-btn:active {
+      box-shadow: 0 2px 0 #C69418;
+      transform: translateY(2px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Success screen */
+    .success {
+      text-align: center;
+      padding: 20px 6px 30px;
+    }
+    .success .check {
+      width: 88px;
+      height: 88px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .success .check::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border: 2px solid rgba(245, 184, 46, 0.25);
+      border-radius: 50%;
+      animation: ring 1.2s ease-out;
+    }
+    @keyframes pop {
+      from { transform: scale(0.4); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    @keyframes ring {
+      from { transform: scale(0.8); opacity: 0.8; }
+      to   { transform: scale(1.6); opacity: 0; }
+    }
+    .success .check svg { width: 48px; height: 48px; stroke: var(--navy); fill: none; stroke-width: 4; }
+    .success h2 { margin-bottom: 8px; font-size: 22px; }
+    .success .lede { color: var(--gold-light); font-size: 14px; margin-bottom: 24px; }
+
+    .next-steps {
+      background: var(--navy-2);
+      border: 1px solid var(--navy-4);
+      border-radius: 14px;
+      padding: 18px 16px;
+      margin: 0 0 20px;
+      text-align: left;
+    }
+    .next-steps .step-head {
+      font-family: "Arial Black", Arial, sans-serif;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .next-steps ol {
+      list-style: none;
+      padding: 0;
+      counter-reset: step;
+    }
+    .next-steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 32px;
+      padding-bottom: 12px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .next-steps li:last-child { padding-bottom: 0; }
+    .next-steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reassure {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 12px 0 20px;
+      line-height: 1.5;
+    }
+    .reassure a { color: var(--gold-2); text-decoration: none; }
+
+    .progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .progress .bar {
+      flex: 1;
+      height: 4px;
+      background: var(--navy-3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress .bar.on { background: var(--gold); }
+
+    @media (max-width: 380px) {
+      h1 { font-size: 20px; }
+      .btn { font-size: 15px; padding: 18px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="widget">
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 1: HOME -->
+    <!-- ============================================================ -->
+    <section class="screen active" id="screen-home">
+      <div class="logo">
+        <svg viewBox="0 0 512 512"><path d="M320 336c0 8.84-7.16 16-16 16h-96c-8.84 0-16-7.16-16-16v-48H0v144c0 25.6 22.4 48 48 48h416c25.6 0 48-22.4 48-48V288H320v48zm144-208h-80V80c0-26.5-21.5-48-48-48H176c-26.5 0-48 21.5-48 48v48H48c-25.6 0-48 22.4-48 48v80h512v-80c0-25.6-22.4-48-48-48zm-144 0H192V96h128v32z"/></svg>
+      </div>
+      <h1>SIDE HUSTLE SOCIETY</h1>
+      <div class="tag">CCHS CLUB</div>
+
+      <div class="q">Need help, <span class="gold">or looking for a gig?</span></div>
+
+      <button class="btn btn-primary" onclick="showScreen('client')">
+        Get help
+        <span class="sub-text">Post a gig. We respond in 24 hrs.</span>
+        <span class="arrow">&rsaquo;</span>
+      </button>
+
+      <button class="btn btn-secondary" onclick="showScreen('student')">
+        Work a gig
+        <span class="sub-text">CCHS students: sign up here.</span>
+        <span class="arrow">&rsaquo;</span>
+      </button>
+
+      <div class="chips">
+        <span class="chip">Yard work</span>
+        <span class="chip">Babysitting</span>
+        <span class="chip">Cleaning</span>
+        <span class="chip">Pet care</span>
+        <span class="chip">Tech help</span>
+        <span class="chip">Moving</span>
+      </div>
+
+      <div class="foot">
+        Culver City  ·  Palms  ·  Mar Vista  ·  Del Rey<br />
+        <a href="mailto:sidehustlesociety@cchs.example">sidehustlesociety@cchs.example</a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 2: CLIENT FORM -->
+    <!-- ============================================================ -->
+    <section class="screen" id="screen-client">
+      <div class="topbar">
+        <button class="back" onclick="showScreen('home')">&lsaquo; Back</button>
+        <div class="brandbar">SHS</div>
+      </div>
+
+      <h2>Request a gig</h2>
+      <p class="sub">A student will reach out within 24 hours.</p>
+
+      <form id="form-client" onsubmit="handleClientSubmit(event)">
+        <div class="group">
+          <label class="lbl">Your name <span class="req">*</span></label>
+          <input type="text" name="name" required />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Phone <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="(310) 555 0123" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Email</label>
+          <input type="email" name="email" placeholder="you@example.com" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Neighborhood <span class="req">*</span></label>
+          <select name="neighborhood" required>
+            <option value="">Pick one</option>
+            <option>Culver City</option>
+            <option>Palms</option>
+            <option>Mar Vista</option>
+            <option>Del Rey</option>
+            <option>Playa Vista</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label class="lbl">What do you need help with? <span class="req">*</span></label>
+          <div class="checks" data-checks="services">
+            <label class="check-pill"><input type="checkbox" value="Yard work" />Yard work</label>
+            <label class="check-pill"><input type="checkbox" value="Babysitting" />Babysitting</label>
+            <label class="check-pill"><input type="checkbox" value="Cleaning" />Cleaning</label>
+            <label class="check-pill"><input type="checkbox" value="Car wash" />Car wash</label>
+            <label class="check-pill"><input type="checkbox" value="Moving" />Moving</label>
+            <label class="check-pill"><input type="checkbox" value="Pet care" />Pet care</label>
+            <label class="check-pill"><input type="checkbox" value="House-sitting" />House-sitting</label>
+            <label class="check-pill"><input type="checkbox" value="Tech help" />Tech help</label>
+            <label class="check-pill"><input type="checkbox" value="Organizing" />Organizing</label>
+            <label class="check-pill"><input type="checkbox" value="Event help" />Event help</label>
+            <label class="check-pill"><input type="checkbox" value="Other" />Other</label>
+          </div>
+          <div class="err" id="err-client-services"></div>
+        </div>
+
+        <div class="group">
+          <label class="lbl">Describe the job <span class="req">*</span></label>
+          <textarea name="description" required placeholder="What needs to be done?"></textarea>
+        </div>
+
+        <div class="group">
+          <label class="lbl">Preferred date <span class="req">*</span></label>
+          <input type="date" name="preferred_date" required />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Estimated duration (hours)</label>
+          <input type="number" name="duration" min="0" step="0.5" placeholder="e.g. 2" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Pets or kids present?</label>
+          <input type="text" name="pets_kids" placeholder="e.g. one friendly dog" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Anything else?</label>
+          <textarea name="notes" placeholder="Optional"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit request</button>
+      </form>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 3: STUDENT FORM -->
+    <!-- ============================================================ -->
+    <section class="screen" id="screen-student">
+      <div class="topbar">
+        <button class="back" onclick="showScreen('home')">&lsaquo; Back</button>
+        <div class="brandbar">SHS</div>
+      </div>
+
+      <h2>Join the club</h2>
+      <p class="sub">For CCHS students 14 and older. Parent consent required.</p>
+
+      <form id="form-student" onsubmit="handleStudentSubmit(event)">
+        <div class="group">
+          <label class="lbl">Your name <span class="req">*</span></label>
+          <input type="text" name="name" required />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Grade during '26 to '27 school year <span class="req">*</span></label>
+          <div class="radio-row" data-radio="grade">
+            <label class="check-pill"><input type="radio" name="grade" value="9" />9</label>
+            <label class="check-pill"><input type="radio" name="grade" value="10" />10</label>
+            <label class="check-pill"><input type="radio" name="grade" value="11" />11</label>
+            <label class="check-pill"><input type="radio" name="grade" value="12" />12</label>
+          </div>
+          <div class="err" id="err-student-grade"></div>
+        </div>
+
+        <div class="group">
+          <label class="lbl">Your phone <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="(310) 555 0123" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Your email <span class="req">*</span></label>
+          <input type="email" name="email" required placeholder="you@example.com" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Neighborhood <span class="req">*</span></label>
+          <select name="neighborhood" required>
+            <option value="">Pick one</option>
+            <option>Culver City</option>
+            <option>Palms</option>
+            <option>Mar Vista</option>
+            <option>Del Rey</option>
+            <option>Playa Vista</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <label class="lbl">What can you do? <span class="req">*</span></label>
+          <div class="checks" data-checks="services">
+            <label class="check-pill"><input type="checkbox" value="Yard work" />Yard work</label>
+            <label class="check-pill"><input type="checkbox" value="Babysitting" />Babysitting</label>
+            <label class="check-pill"><input type="checkbox" value="Cleaning" />Cleaning</label>
+            <label class="check-pill"><input type="checkbox" value="Car wash" />Car wash</label>
+            <label class="check-pill"><input type="checkbox" value="Moving" />Moving</label>
+            <label class="check-pill"><input type="checkbox" value="Pet care" />Pet care</label>
+            <label class="check-pill"><input type="checkbox" value="House-sitting" />House-sitting</label>
+            <label class="check-pill"><input type="checkbox" value="Tech help" />Tech help</label>
+            <label class="check-pill"><input type="checkbox" value="Tutoring" />Tutoring</label>
+            <label class="check-pill"><input type="checkbox" value="Organizing" />Organizing</label>
+            <label class="check-pill"><input type="checkbox" value="Event help" />Event help</label>
+          </div>
+          <div class="err" id="err-student-services"></div>
+        </div>
+
+        <div class="group">
+          <label class="lbl">When can you work? <span class="req">*</span></label>
+          <div class="sub-lbl">Pick times</div>
+          <div class="checks" data-checks="times">
+            <label class="check-pill"><input type="checkbox" value="Morning" />Morning</label>
+            <label class="check-pill"><input type="checkbox" value="Afternoon" />Afternoon</label>
+            <label class="check-pill"><input type="checkbox" value="Evening" />Evening</label>
+          </div>
+          <div class="sub-lbl" style="margin-top:12px;">Pick days</div>
+          <div class="checks" data-checks="days">
+            <label class="check-pill"><input type="checkbox" value="Mon" />Mon</label>
+            <label class="check-pill"><input type="checkbox" value="Tue" />Tue</label>
+            <label class="check-pill"><input type="checkbox" value="Wed" />Wed</label>
+            <label class="check-pill"><input type="checkbox" value="Thu" />Thu</label>
+            <label class="check-pill"><input type="checkbox" value="Fri" />Fri</label>
+            <label class="check-pill"><input type="checkbox" value="Sat" />Sat</label>
+            <label class="check-pill"><input type="checkbox" value="Sun" />Sun</label>
+          </div>
+          <div class="quick-set">
+            <button type="button" class="quick" onclick="quickSet('days', ['Mon','Tue','Wed','Thu','Fri'])">Weekdays</button>
+            <button type="button" class="quick" onclick="quickSet('days', ['Sat','Sun'])">Weekends</button>
+            <button type="button" class="quick" onclick="quickSet('days', ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])">All week</button>
+            <button type="button" class="quick" onclick="quickSet('days', [])">Clear</button>
+          </div>
+          <div class="err" id="err-student-availability"></div>
+        </div>
+
+        <div class="group">
+          <label class="lbl">Availability notes</label>
+          <input type="text" name="availability_notes" placeholder="Optional: e.g. flexible in summer, not Thursdays" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Parent or guardian name <span class="req">*</span></label>
+          <input type="text" name="parent_name" required />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Parent phone <span class="req">*</span></label>
+          <input type="tel" name="parent_phone" required />
+        </div>
+
+        <div class="group">
+          <label class="lbl">Emergency contact</label>
+          <input type="text" name="emergency" placeholder="Optional" />
+        </div>
+
+        <div class="group">
+          <label class="lbl">CPR certified? <span class="req">*</span></label>
+          <div class="radio-row" data-radio="cpr">
+            <label class="check-pill"><input type="radio" name="cpr" value="Yes" />Yes</label>
+            <label class="check-pill"><input type="radio" name="cpr" value="No" />No</label>
+            <label class="check-pill"><input type="radio" name="cpr" value="Scheduled" />Scheduled</label>
+          </div>
+          <div class="err" id="err-student-cpr"></div>
+        </div>
+
+        <div class="consent-box">
+          <strong>Parent acknowledgement</strong><br />
+          A parent or guardian must sign the paper consent form before your first job. Your Member Coordinator will collect it during orientation.
+          <label class="consent-check">
+            <input type="checkbox" name="consent" required />
+            <span>A parent has read the consent form and knows I am applying.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit application</button>
+      </form>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 4: SUCCESS (with reassurance) -->
+    <!-- ============================================================ -->
+    <section class="screen" id="screen-success">
+      <div class="success">
+        <div class="check">
+          <svg viewBox="0 0 24 24"><polyline points="4 13 10 19 20 6" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+        </div>
+        <h2 id="success-title">Got it. You are in.</h2>
+        <p class="lede" id="success-lede">Your request is logged and our team has been notified.</p>
+
+        <div class="next-steps">
+          <div class="step-head">WHAT HAPPENS NEXT</div>
+          <ol id="success-steps"></ol>
+        </div>
+
+        <div class="reassure" id="success-reassure">
+          Urgent? Email <a href="mailto:sidehustlesociety@cchs.example">sidehustlesociety@cchs.example</a> or text the number from our flyer.
+        </div>
+
+        <button class="btn btn-primary" onclick="showScreen('home')">
+          Back home
+          <span class="arrow">&rsaquo;</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // =============================================================
+    // QUICK SET for availability days
+    // =============================================================
+    function quickSet(groupName, values) {
+      const container = document.querySelector(`[data-checks="${groupName}"]`);
+      if (!container) return;
+      container.querySelectorAll(".check-pill").forEach(pill => {
+        const input = pill.querySelector("input");
+        const on = values.includes(input.value);
+        input.checked = on;
+        pill.classList.toggle("on", on);
+      });
+    }
+
+    // =============================================================
+    // SCREEN SWITCHING
+    // =============================================================
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("screen-" + id).classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    // =============================================================
+    // PILL-STYLE CHECKBOX AND RADIO TOGGLING
+    // =============================================================
+    document.querySelectorAll("[data-checks]").forEach(container => {
+      container.addEventListener("click", e => {
+        const pill = e.target.closest(".check-pill");
+        if (!pill) return;
+        const input = pill.querySelector("input");
+        setTimeout(() => {
+          pill.classList.toggle("on", input.checked);
+        }, 0);
+      });
+    });
+    document.querySelectorAll("[data-radio]").forEach(container => {
+      container.addEventListener("click", e => {
+        const pill = e.target.closest(".check-pill");
+        if (!pill) return;
+        const input = pill.querySelector("input");
+        setTimeout(() => {
+          container.querySelectorAll(".check-pill").forEach(p => p.classList.remove("on"));
+          if (input.checked) pill.classList.add("on");
+        }, 0);
+      });
+    });
+
+    // =============================================================
+    // FORM SUBMISSION + VALIDATION
+    // =============================================================
+    function collectForm(form) {
+      const data = {};
+      new FormData(form).forEach((v, k) => {
+        if (data[k] !== undefined) {
+          data[k] = [].concat(data[k], v);
+        } else {
+          data[k] = v;
+        }
+      });
+      form.querySelectorAll("[data-checks]").forEach(group => {
+        const name = group.dataset.checks;
+        const values = Array.from(group.querySelectorAll("input:checked")).map(i => i.value);
+        data[name] = values;
+      });
+      return data;
+    }
+
+    // Validators
+    function isValidName(s)  { return typeof s === "string" && s.trim().length >= 2 && s.trim().length <= 80; }
+    function isValidEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((s || "").trim()); }
+    function isValidPhone(s) {
+      if (!s) return false;
+      const digits = s.replace(/\D/g, "");
+      return digits.length >= 10 && digits.length <= 15;
+    }
+    function isFutureDate(s) {
+      if (!s) return false;
+      const d = new Date(s + "T00:00:00");
+      if (isNaN(d.getTime())) return false;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return d >= today;
+    }
+    function isNonEmpty(s, min = 1) { return typeof s === "string" && s.trim().length >= min; }
+
+    function showFieldError(form, name, message) {
+      let err = form.querySelector(`[data-err="${name}"]`);
+      if (!err) {
+        const field = form.querySelector(`[name="${name}"]`);
+        if (!field) return;
+        err = document.createElement("div");
+        err.className = "err";
+        err.setAttribute("data-err", name);
+        field.closest(".group").appendChild(err);
+      }
+      err.textContent = message;
+    }
+    function clearFieldErrors(form) {
+      form.querySelectorAll(".err[data-err]").forEach(e => e.textContent = "");
+    }
+
+    function handleClientSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = collectForm(form);
+      clearFieldErrors(form);
+      let valid = true;
+
+      if (!isValidName(data.name))          { showFieldError(form, "name", "Please enter your full name."); valid = false; }
+      if (!isValidPhone(data.phone))        { showFieldError(form, "phone", "Enter a valid phone (10 digits)."); valid = false; }
+      if (data.email && !isValidEmail(data.email)) { showFieldError(form, "email", "That email does not look right."); valid = false; }
+      if (!data.neighborhood)               { showFieldError(form, "neighborhood", "Pick a neighborhood."); valid = false; }
+      if (!data.services || data.services.length === 0) {
+        document.getElementById("err-client-services").textContent = "Pick at least one service.";
+        valid = false;
+      } else {
+        document.getElementById("err-client-services").textContent = "";
+      }
+      if (!isNonEmpty(data.description, 10)) { showFieldError(form, "description", "A sentence or two helps us match the right student."); valid = false; }
+      if (!isFutureDate(data.preferred_date)){ showFieldError(form, "preferred_date", "Please pick today or a later date."); valid = false; }
+
+      if (!valid) {
+        scrollToFirstError(form);
+        return;
+      }
+
+      data._type = "client_request";
+      data._submitted_at = new Date().toISOString();
+
+      const btn = form.querySelector(".submit-btn");
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+
+      submitToBackend(data).then(ok => {
+        btn.disabled = false;
+        btn.textContent = "Submit request";
+        if (ok) {
+          setSuccessMessage("client", data);
+          form.reset();
+          form.querySelectorAll(".check-pill.on").forEach(p => p.classList.remove("on"));
+          showScreen("success");
+        } else {
+          alert("Something went wrong. Please try again or email sidehustlesociety@cchs.example.");
+        }
+      });
+    }
+
+    function handleStudentSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = collectForm(form);
+      clearFieldErrors(form);
+      let valid = true;
+
+      if (!isValidName(data.name))           { showFieldError(form, "name", "Please enter your full name."); valid = false; }
+      if (!data.grade)                       { document.getElementById("err-student-grade").textContent = "Select your grade."; valid = false; } else { document.getElementById("err-student-grade").textContent = ""; }
+      if (!isValidPhone(data.phone))         { showFieldError(form, "phone", "Enter a valid phone (10 digits)."); valid = false; }
+      if (!isValidEmail(data.email))         { showFieldError(form, "email", "Enter a valid email."); valid = false; }
+      if (!data.neighborhood)                { showFieldError(form, "neighborhood", "Pick a neighborhood."); valid = false; }
+      if (!data.services || data.services.length === 0) {
+        document.getElementById("err-student-services").textContent = "Pick at least one service.";
+        valid = false;
+      } else {
+        document.getElementById("err-student-services").textContent = "";
+      }
+      // Availability: require at least one time AND at least one day
+      const availErr = document.getElementById("err-student-availability");
+      const hasTimes = data.times && data.times.length > 0;
+      const hasDays  = data.days  && data.days.length  > 0;
+      if (!hasTimes && !hasDays) {
+        availErr.textContent = "Pick at least one time and one day.";
+        valid = false;
+      } else if (!hasTimes) {
+        availErr.textContent = "Pick at least one time (morning, afternoon, or evening).";
+        valid = false;
+      } else if (!hasDays) {
+        availErr.textContent = "Pick at least one day.";
+        valid = false;
+      } else {
+        availErr.textContent = "";
+      }
+      if (!isValidName(data.parent_name))    { showFieldError(form, "parent_name", "Please enter your parent or guardian's name."); valid = false; }
+      if (!isValidPhone(data.parent_phone))  { showFieldError(form, "parent_phone", "Enter a valid phone (10 digits)."); valid = false; }
+      if (!data.cpr)                         { document.getElementById("err-student-cpr").textContent = "Tell us your CPR status."; valid = false; } else { document.getElementById("err-student-cpr").textContent = ""; }
+      if (!data.consent)                     { showFieldError(form, "consent", "Please confirm a parent has read the form."); valid = false; }
+
+      if (!valid) {
+        scrollToFirstError(form);
+        return;
+      }
+
+      data._type = "student_signup";
+      data._submitted_at = new Date().toISOString();
+
+      const btn = form.querySelector(".submit-btn");
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+
+      submitToBackend(data).then(ok => {
+        btn.disabled = false;
+        btn.textContent = "Submit application";
+        if (ok) {
+          setSuccessMessage("student", data);
+          form.reset();
+          form.querySelectorAll(".check-pill.on").forEach(p => p.classList.remove("on"));
+          showScreen("success");
+        } else {
+          alert("Something went wrong. Please try again or email sidehustlesociety@cchs.example.");
+        }
+      });
+    }
+
+    function scrollToFirstError(form) {
+      const err = form.querySelector(".err:not(:empty)");
+      if (err) err.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    // =============================================================
+    // RICH SUCCESS SCREEN
+    // =============================================================
+    function setSuccessMessage(type, data) {
+      const title = document.getElementById("success-title");
+      const lede  = document.getElementById("success-lede");
+      const steps = document.getElementById("success-steps");
+      const reassure = document.getElementById("success-reassure");
+
+      if (type === "client") {
+        const firstName = (data.name || "").split(" ")[0] || "there";
+        title.textContent = `Thanks, ${firstName}.`;
+        lede.textContent  = "Your gig request is in. We will call the number you gave us within 24 hours to confirm.";
+        steps.innerHTML = `
+          <li><strong>Within 24 hours:</strong> Erez (our Operations Lead) calls the number you gave to confirm details and answer questions.</li>
+          <li><strong>Within 48 hours:</strong> We post your gig to our CCHS student members and a qualified student claims it.</li>
+          <li><strong>Day of the job:</strong> You get the student's name and arrival window. Pay them directly after the job.</li>
+          <li><strong>Right after:</strong> A short two-question survey so we can keep improving.</li>
+        `;
+        reassure.innerHTML = `
+          Need to reach us sooner? Email <a href="mailto:sidehustlesociety@cchs.example">sidehustlesociety@cchs.example</a>.
+          Changed your mind? Just reply to the confirmation call, no charge.
+        `;
+      } else {
+        const firstName = (data.name || "").split(" ")[0] || "friend";
+        title.textContent = `Welcome aboard, ${firstName}.`;
+        lede.textContent  = "Your application is in. Caetano (Co-Founder) will reach out within 3 days.";
+        steps.innerHTML = `
+          <li><strong>Within 3 days:</strong> Caetano or Olivia (Member Coordinator) reaches out to welcome you and schedule orientation.</li>
+          <li><strong>Orientation:</strong> Bring your signed paper parent consent form. Meet the team. Learn the rules.</li>
+          <li><strong>First gig:</strong> You claim one from the daily drop in the member group chat. First job is always paired.</li>
+          <li><strong>Every job after:</strong> Show up on time, text check-ins, pick up your cash. Build a reputation.</li>
+        `;
+        reassure.innerHTML = `
+          Questions before orientation? Email <a href="mailto:sidehustlesociety@cchs.example">sidehustlesociety@cchs.example</a>.
+          You can opt out any time, no questions asked.
+        `;
+      }
+    }
+
+    // =============================================================
+    // BACKEND INTEGRATION
+    // =============================================================
+    // Paste your Google Apps Script Web App URL below. The Apps Script
+    // code is in Side_Hustle_Society_Apps_Script_Backend.gs and already
+    // routes submissions:
+    //   client requests  -> Erez (erezwaisman23@gmail.com)
+    //   student signups  -> Caetano (caenanosanchez@gmail.com)
+    // and appends each submission to the right tab of your shared sheet.
+    //
+    // Until you wire it up, the widget runs in demo mode: submissions
+    // log to the browser console and the success screen still shows.
+    // =============================================================
+    const BACKEND_URL = ""; // e.g. "https://script.google.com/macros/s/AKfycb.../exec"
+
+    async function submitToBackend(data) {
+      console.log("Submission payload:", data);
+      if (!BACKEND_URL) {
+        // Demo mode: no backend wired yet. Simulate a short network delay.
+        await new Promise(r => setTimeout(r, 400));
+        return true;
+      }
+      try {
+        const res = await fetch(BACKEND_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data),
+        });
+        return true;
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>
